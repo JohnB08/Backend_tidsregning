@@ -93,3 +93,4 @@ dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 
 Da kan vi bruke nøkkelen vi definerte som "key" for å hente ut en "value" fra KeyChain. 
 
+Det finnes andre "keychain" løsninger dere kan komme borti i arbeidslivet. Både Azure og AWS har sine egne devops keychain løsninger, en annen populær løsning er HashiCorp's sin Vault.
