@@ -2,6 +2,7 @@ using System;
 using Backend_tidsregning.Core.Context;
 using Backend_tidsregning.Core.Entities.MongoDb;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 
 namespace Backend_tidsregning.Tests.MongoDbClientTest;
 
@@ -19,16 +20,15 @@ public class MongoDbClientTest
         Assert.True(!string.IsNullOrWhiteSpace(connectionString));
     }
     [Fact]
-    public void TestPingToDb()
+    public async Task TestPingToDb()
     {
         //Arrange
         var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().Build();
-        var connectionString = config["MongoDb:ConnectionString"];
-
         //Act 
-        var mongoClient = new MongoDbContext(connectionString!);
-        var ping = mongoClient.Client.GetDatabase("Tidsstyring").GetCollection<Employee>("Employees");
+        var mongoClient = new MongoDbContext(config!);
+        var filter = Builders<Employee>.Filter.Empty;
+        var count = await mongoClient.Employees.CountDocumentsAsync(filter);
         //Assert
-        Assert.NotNull(ping);
+        Assert.Equal(0, count);
     }
 }
