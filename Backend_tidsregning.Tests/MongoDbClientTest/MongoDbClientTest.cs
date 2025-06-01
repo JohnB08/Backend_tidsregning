@@ -14,7 +14,8 @@ public class MongoDbClientTest
         //Arrange
         var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().AddEnvironmentVariables().Build();
         //Act
-        var connectionString = config["MongoDb:ConnectionString"] ?? config["MONGO_DB_CONNECTION_STRING"];
+        var connectionString = config["MongoDb:ConnectionString"];
+        if (string.IsNullOrWhiteSpace(connectionString)) connectionString = config["MONGO_DB_CONNECTION_STRING"];
         //Assert
         Assert.NotNull(connectionString);
         Assert.True(!string.IsNullOrWhiteSpace(connectionString));
