@@ -34,13 +34,16 @@ jobs:
         - name: Build Solution
           run: dotnet build ./Backend_tidsregning.sln --no-restore --configuration Release
         
+        - name: Debug env
+          run: echo "Value ${{ secrets.MONGO_DB_CONNECTION_STRING}}"
+        
           #Før vi kan kjøre testene våre.
         - name: Run Tests
           run: dotnet test ./Backend_tidsregning.sln
           #Siden vi ikke har implementert en felles key vault enda til prosjektet, har vi lagt til en environment variable collection som github sine runners kan bruke på vårt repo.
           #Den collectionen heter secrets. Vi kan referere til den her for å hente connectionStringen github trenger for å teste koden vår. 
           env:
-            MONGO_DB_CONNECTION_STRING: ${{secrets.MONGO_DB_CONNECTION_STRING}}
+            MongoDb__ConnectionString: ${{ secrets.MONGO_DB_CONNECTION_STRING }}
           
           #Det finnes flere oversikter på nettet over automatiske Actions tilgjengelige i vår github runner.
           #RunsOn har en flott step by step guide for hva og hvordan github workflows fungerer, og hva jobs kan gjøre for oss. 
