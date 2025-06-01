@@ -94,3 +94,18 @@ dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 Da kan vi bruke nøkkelen vi definerte som "key" for å hente ut en "value" fra KeyChain. 
 
 Det finnes andre "keychain" løsninger dere kan komme borti i arbeidslivet. Både Azure og AWS har sine egne devops keychain løsninger, en annen populær løsning er HashiCorp's sin Vault.
+
+
+## Actions
+Vi har nå satt opp et sett med Actions for å kunne automatisk validere og skjekke at testene våre fungerer via Github workflows. <br>
+Vi pinger databasen vår via en connectionstring som er i secrets environmentet i repoet vårt. <br>
+For en enkel introduksjon til hvordan disse virker, se gjerne på kommentarene i ci.yaml filen som ligger i .github/workflow folderen i prosjektet (dette er folderen github bruker for å finne workflow konfigurasjonsfiler)
+
+Vi har nå sett at vi kan etablere, lese og skrive til en mongo db atlas server via koden vår. Men koden vi har nå er veldig grov.
+
+Neste steg:
+- [ ] Hardkodete databasenavn og collectionnavn er fy-fy. Vi bør finne en metode som lar oss injecte databasenavn som driveren skal koble seg til direkte.
+
+- [ ] Mye av businesslogikken vår lever nå i Controlleren vår vi bruke for eksperimentering. Det er også fy-fy. Vi bør ha som mål å sette opp en service for hver collection, så en controller for hver service. 
+
+- [ ] Vi kan implementere tester for servicene våre, for å ensure at funksjonaliteten er som forventet. Når vi implementerer testene våre, bør vi tenke på hva som er miminumskravet for hver funksjonalitet i servicen vår, så bygge testene opp gradvis der etter. Litt som med den super enkle ping testen vi har: Vi tester først om vi kan hente ned / garantere for at connection stringen vår finnes, før vi har en etterfølgende test som prøver å pinge databasen med stringen.
