@@ -1,0 +1,50 @@
+
+#Vi må først definere når denne workflowen skal triggre på github
+
+#Her sier vi at denne workflowen skal triggre både på pull requests og på push til branchen master.
+#branches er en samling, så her kan man legge til flere branches om man ønsker, hvis det blir opprettet en dev branch, kan det være lurt å legge den til her også. 
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+#Vi definere så hva jobb som skal gjennomføres, i vårt tilfelle vil vi kjøre testene våre.
+jobs:
+    test:
+      #Vi må så definere hva operativsystem vårt job environment skal bruke i grunn. 
+      runs-on: ubuntu-latest
+      
+      #Her definerer vi første "step" av jobben som skal gjennomføres, vi bruker den allerede ferdigdefinerte jobben actions/checkout@v4 som henter koden fra repositoriet.
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v4
+
+        #Vi setter så opp .NET i github runneren som skal kjøre koden vår. 
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+              dotnet-version: '8.0.x'
+
+        #Vi må så, som når vi containeriserer et prosjekt, gå gjennom stegene for å bygge prosjektet vårt i github runneren
+        #Legg merke til at vi peker på vår sln fil, vi kan bruke den som en fellesreferanse til prosjektet vårt.
+        - name: Restore packages
+          run: dotnet restore ./Backend_tidsregning.sln
+
+        - name: Build Solution
+          run: dotnet build ./Backend_tidsregning.sln --no-restore --configuration Release
+        
+          #Før vi kan kjøre testene våre.
+        - name: Run Tests
+          run: dotnet test ./Backend_tidsregning.sln
+          #Siden vi ikke har implementert en felles key vault enda til prosjektet, har vi lagt til en environment variable collection som github sine runners kan bruke på vårt repo.
+          #Den collectionen heter secrets. Vi kan referere til den her for å hente connectionStringen github trenger for å teste koden vår. 
+          env:
+            MONGO_DB_CONNECTION_STRING: ${{secrets.MONGO_DB_CONNECTION_STRING}}
+          
+          #Det finnes flere oversikter på nettet over automatiske Actions tilgjengelige i vår github runner.
+          #RunsOn har en flott step by step guide for hva og hvordan github workflows fungerer, og hva jobs kan gjøre for oss. 
+          
+
+      
+      

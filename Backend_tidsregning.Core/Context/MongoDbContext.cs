@@ -16,7 +16,8 @@ public class MongoDbContext
     public IMongoCollection<Permission> Permissions { get; private set; }
     public MongoDbContext(IConfiguration config)
     {
-        var settings = MongoClientSettings.FromConnectionString(config["MongoDb:ConnectionString"]);
+        var connectionString = config["MongoDb:ConnectionString"] ?? config["MONGO_DB_CONNECTION_STRING"];
+        var settings = MongoClientSettings.FromConnectionString(connectionString);
         settings.ServerApi = new ServerApi(ServerApiVersion.V1);
         Client = new MongoClient(settings);
         Employees = Client.GetDatabase("Tidsstyring").GetCollection<Employee>("Employees");

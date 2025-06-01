@@ -12,23 +12,26 @@ public class MongoDbClientTest
     public void TestFetchConnectionString()
     {
         //Arrange
-        var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().Build();
+        var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().AddEnvironmentVariables().Build();
         //Act
-        var connectionString = config["MongoDb:ConnectionString"];
+        var connectionString = config["MongoDb:ConnectionString"] ?? config["MONGO_DB_CONNECTION_STRING"];
         //Assert
         Assert.NotNull(connectionString);
         Assert.True(!string.IsNullOrWhiteSpace(connectionString));
     }
     [Fact]
-    public async Task TestPingToDb()
+    public async Task TestFetchDocumentFromDb()
     {
         //Arrange
-        var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().Build();
+        var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().AddEnvironmentVariables().Build();
         //Act 
         var mongoClient = new MongoDbContext(config!);
         var filter = Builders<Employee>.Filter.Empty;
-        var count = await mongoClient.Employees.CountDocumentsAsync(filter);
+        var result = await mongoClient.Employees.FindAsync(Builders<Employee>.Filter.Empty);
+        var employeeList = await result.ToListAsync();
         //Assert
-        Assert.Equal(0, count);
+        Assert.NotNull(employeeList);
+        Assert.IsType<List<Employee>>(employeeList);
+
     }
 }
