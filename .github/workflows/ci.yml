@@ -14,6 +14,8 @@ jobs:
     test:
       #Vi må så definere hva operativsystem vårt job environment skal bruke i grunn. 
       runs-on: ubuntu-latest
+      #Vi har satt opp et environment på github som inneholder variablene vi trenger. Vi kan lage flere environments om vi trenger.
+      environment: secrets
       
       #Her definerer vi første "step" av jobben som skal gjennomføres, vi bruker den allerede ferdigdefinerte jobben actions/checkout@v4 som henter koden fra repositoriet.
       steps:
