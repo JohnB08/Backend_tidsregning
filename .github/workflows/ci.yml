@@ -35,7 +35,9 @@ jobs:
           run: dotnet build ./Backend_tidsregning.sln --no-restore --configuration Release
         
         - name: Debug env
-          run: echo "Value ${{ secrets.MONGO_DB_CONNECTION_STRING}}"
+          run: echo "Value $Variable"
+          env:
+            Variable: ${{ secrets.MONGO_DB_CONNECTION_STRING }}
         
           #Før vi kan kjøre testene våre.
         - name: Run Tests
