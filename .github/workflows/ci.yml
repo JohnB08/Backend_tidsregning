@@ -40,7 +40,7 @@ jobs:
         - name: Debug env
           run: echo "Value $Variable"
           env:
-            Variable: ${{ secrets.MONGO_DB_CONNECTION_STRING }}
+            Variable: ${{ vars.MONGO_DB_CONNECTION_STRING }}
         
           #Før vi kan kjøre testene våre.
         - name: Run Tests
