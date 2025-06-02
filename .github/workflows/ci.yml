@@ -8,6 +8,7 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  workflow_dispatch:
 
 #Vi definere så hva jobb som skal gjennomføres, i vårt tilfelle vil vi kjøre testene våre.
 jobs:
