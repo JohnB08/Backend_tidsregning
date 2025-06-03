@@ -1,10 +1,11 @@
 using System;
+using Backend_tidsregning.Core.Interfaces.Entites;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Backend_tidsregning.Core.Entities.MongoDb;
 
-public class Permission
+public class Permission : IMongoDbId
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

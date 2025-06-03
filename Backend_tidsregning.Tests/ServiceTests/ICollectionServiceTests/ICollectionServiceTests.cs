@@ -62,15 +62,17 @@ public class ICollectionServiceTests
         Assert.Equal(currentCount + 1, newCount);
         Assert.True(success);
     }
-    [Fact]
-    public async Task TestRemoveEmployeeFromCollection()
+
+    /* Her har vi laget en Employees Theorydatacollection nedenfor som inneholder en enkel liste over employee data. 
+    Theory attributten sier at testen skal kjøre for alle parameterene vi har.
+    Legg merke til emp parametere i testen. Vi kan se for oss at denne testen kjøres for each employee in employees.
+    Det lar oss teste flere potensielle usecases / edgecases av employers. */
+    [Theory]
+    [MemberData(nameof(Employees), MemberType = typeof(ICollectionServiceTests))]
+    public async Task TestRemoveEmployeeFromCollection(Employee emp)
     {
 
-        _ = await _employeeCollection.TryAddAsync(new Employee()
-        {
-            Name = "John",
-            EmailHash = BCrypt.Net.BCrypt.HashPassword("Hello@World.com")
-        });
+        _ = await _employeeCollection.TryAddAsync(emp);
         var currentCount = await _employeeCollection.GetCountAsync();
         var employeeList = await _employeeCollection.GetAllAsync();
 
@@ -95,4 +97,33 @@ public class ICollectionServiceTests
 
         Assert.True(success);
     }
+
+    public static TheoryData<Employee> Employees => new()
+    {
+      new Employee()
+        {
+            Name = "John",
+            EmailHash = BCrypt.Net.BCrypt.HashPassword("Hello@World.com")
+        },
+        new Employee()
+        {
+            Name = "David",
+            EmailHash = BCrypt.Net.BCrypt.HashPassword("OldTown@World.com")
+        },
+        new Employee()
+        {
+            Name = "Oscar",
+            EmailHash = BCrypt.Net.BCrypt.HashPassword("Mad@World.com")
+        },
+        new Employee()
+        {
+            Name = "Irene",
+            EmailHash = BCrypt.Net.BCrypt.HashPassword("New@World.com")
+        },
+        new Employee()
+        {
+            Name = "Andrea",
+            EmailHash = BCrypt.Net.BCrypt.HashPassword("Missing@World.com")
+        }
+    };
 }
