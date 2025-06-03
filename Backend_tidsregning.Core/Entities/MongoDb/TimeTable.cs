@@ -1,14 +1,15 @@
 using System;
+using Backend_tidsregning.Core.Interfaces.Entites;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Backend_tidsregning.Core.Entities.MongoDb;
 
-public class TimeTable
+public class TimeTable : IMongoDbId
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? TimeTable_ID { get; set; }  // Auto-generated ObjectId
+    public Guid _ID { get; set; }  // Auto-generated ObjectId
 
     [BsonElement("Employee_ID")]
     [BsonRepresentation(BsonType.String)]

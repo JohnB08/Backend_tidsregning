@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="Always"  />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

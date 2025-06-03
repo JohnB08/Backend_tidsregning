@@ -15,27 +15,30 @@ namespace Backend_tidsregning.WebApi.Controllers
         [HttpGet]
         public async Task<List<Employee>> Get()
         {
-            var filter = Builders<Employee>.Filter.Empty;
-            var result = await context.Employees.FindAsync(filter);
-            var list = await result.ToListAsync();
-            return list;
+            /*  var filter = Builders<Employee>.Filter.Empty;
+             var result = await context.Employees.FindAsync(filter);
+             var list = await result.ToListAsync();
+             return list; */
+            throw new NotImplementedException();
 
         }
         [Route("/{id}")]
         [HttpGet]
         public async Task<Employee> Get(Guid id)
         {
-            var builder = Builders<Employee>.Filter;
+            /* var builder = Builders<Employee>.Filter;
             var filter = builder.Eq(employee => employee.Employee_ID, id);
             var result = await context.Employees.FindAsync(filter);
-            return result.First();
+            return result.First(); */
+            throw new NotImplementedException();
         }
         [HttpPost]
         public async Task Post([FromBody] CreateNewEmployeeFromBodyDTO employeeDTO)
         {
 
-            var employee = employeeDTO.MapToNewEmployee();
-            await context.Employees.InsertOneAsync(employee);
+            /* var employee = employeeDTO.MapToNewEmployee();
+            await context.Employees.InsertOneAsync(employee); */
+            throw new NotImplementedException();
         }
 
     }

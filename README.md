@@ -95,6 +95,18 @@ Da kan vi bruke nøkkelen vi definerte som "key" for å hente ut en "value" fra 
 
 Det finnes andre "keychain" løsninger dere kan komme borti i arbeidslivet. Både Azure og AWS har sine egne devops keychain løsninger, en annen populær løsning er HashiCorp's sin Vault.
 
+Vi kan hente ut generell configurasjon via json filer ved å bruke pakken:
+
+```bash
+dotnet add package Microsoft.Extensions.Configuration.Json
+```
+
+Vi kan hente ut configurasjon fra environmentet applikasjonen kjører i via pakken:
+
+```bash
+dotnet add package Microsoft.Extensions.Configuration.EnvironmentVariables
+```
+
 
 ## Actions
 Vi har nå satt opp et sett med Actions for å kunne automatisk validere og skjekke at testene våre fungerer via Github workflows. <br>

@@ -1,4 +1,5 @@
 using Backend_tidsregning.Core.Context;
+using Backend_tidsregning.Core.Context.ContextOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Configuration.AddUserSecrets<Program>();
+builder.Services.Configure<ContextOptions>(
+    builder.Configuration.GetSection("MongoDb")
+);
 builder.Services.AddScoped<MongoDbContext>();
 builder.Services.AddSwaggerGen();
 

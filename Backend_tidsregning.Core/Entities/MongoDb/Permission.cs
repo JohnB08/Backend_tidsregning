@@ -8,7 +8,7 @@ public class Permission
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? Permission_ID { get; set; }  // Auto-generated ObjectId
+    public Guid _ID { get; set; }  // Auto-generated ObjectId
 
     [BsonElement("Employee_ID")]
     [BsonRepresentation(BsonType.String)]
