@@ -4,11 +4,11 @@ namespace Backend_tidsregning.Core.Entities.DTO;
 
 public class CreateNewEmployeeFromBodyDTO
 {
-    public string EmailHash
+    public required string EmailHash
     {
         get;set;
     }
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     public Employee MapToNewEmployee()
     {

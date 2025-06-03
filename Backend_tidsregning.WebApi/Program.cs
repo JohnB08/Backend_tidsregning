@@ -31,7 +31,7 @@ builder.Services.AddScoped<ICollectionService<Employee>, CollectionService<Emplo
 {
     var options = Options.Create<ServiceOptions>(new()
     {
-        Collection = builder.Configuration.GetRequiredSection("MongoDb:Collections:Employee").Value ?? throw new ArgumentNullException()
+        Collection = builder.Configuration.GetRequiredSection("MongoDb:Collections:Employees").Value ?? throw new ArgumentNullException()
     });
     var context = provider.GetRequiredService<MongoDbContext>();
     return new CollectionService<Employee>(options, context);
@@ -51,7 +51,7 @@ builder.Services.AddScoped<ICollectionService<Permission>, CollectionService<Per
 {
     var options = Options.Create<ServiceOptions>(new()
     {
-        Collection = builder.Configuration.GetRequiredSection("MongoDb:Collections:Permission").Value ?? throw new ArgumentNullException()
+        Collection = builder.Configuration.GetRequiredSection("MongoDb:Collections:Permissions").Value ?? throw new ArgumentNullException()
     });
     var context = provider.GetRequiredService<MongoDbContext>();
     return new CollectionService<Permission>(options, context);
