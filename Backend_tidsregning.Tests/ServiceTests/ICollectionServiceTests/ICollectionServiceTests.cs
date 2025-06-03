@@ -24,13 +24,17 @@ public class ICollectionServiceTests
                             .AddJsonFile("appsettings.json", false, true)
                             .Build();
 
+        var connectionString = config["MongoDb:ConnectionString"];
+        var settings = MongoClientSettings.FromConnectionString(connectionString);
+        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+        var client = new MongoClient(settings);
         var databaseName = config.GetRequiredSection("MongoDb:DatabaseName").Value;
 
         var contextOptions = Options.Create<ContextOptions>(new()
         {
             DatabaseName = databaseName ?? throw new ArgumentNullException(),
         });
-        _context = new(config, contextOptions);
+        _context = new(client, contextOptions);
 
         var collectionName = config.GetRequiredSection("MongoDb:Collections:Employees").Value;
         var collectionOptions = Options.Create<ServiceOptions>(new()

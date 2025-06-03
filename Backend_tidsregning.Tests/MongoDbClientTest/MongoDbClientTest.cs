@@ -11,28 +11,25 @@ namespace Backend_tidsregning.Tests.MongoDbClientTest;
 
 public class MongoDbClientTest
 {
-    [Fact]
-    public void TestFetchConnectionString()
+    private MongoClient _client;
+    private IConfiguration _config;
+    public MongoDbClientTest()
     {
-        //Arrange
-        var config = new ConfigurationBuilder().AddUserSecrets<MongoDbClientTest>().AddEnvironmentVariables().Build();
-        //Act
-        var connectionString = config["MongoDb:ConnectionString"];
-        if (string.IsNullOrWhiteSpace(connectionString)) connectionString = config["MONGO_DB_CONNECTION_STRING"];
-        //Assert
-        Assert.NotNull(connectionString);
-        Assert.True(!string.IsNullOrWhiteSpace(connectionString));
+
+        _config = new ConfigurationBuilder()
+                    .AddUserSecrets<MongoDbClientTest>()
+                    .AddEnvironmentVariables()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+        var connectionString = _config["MongoDb:ConnectionString"];
+        var settings = MongoClientSettings.FromConnectionString(connectionString);
+        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+        _client = new MongoClient(settings);
     }
     [Fact]
     public async Task TestFetchDocumentFromDb()
     {
-        //Arrange
-        var config = new ConfigurationBuilder()
-                            .AddUserSecrets<MongoDbClientTest>()
-                            .AddEnvironmentVariables()
-                            .AddJsonFile("appsettings.json", false, true)
-                            .Build();
-        var mongoDbConfig = config.GetRequiredSection("MongoDb");
+        var mongoDbConfig = _config.GetRequiredSection("MongoDb");
         var contextOptions = Options.Create<ContextOptions>( new ContextOptions()
         {
             DatabaseName = mongoDbConfig.GetRequiredSection("DatabaseName").Value ?? throw new ArgumentNullException(),
@@ -41,9 +38,8 @@ public class MongoDbClientTest
         {
             Collection = mongoDbConfig.GetRequiredSection("Collections:Employees").Value ?? throw new ArgumentNullException()
         });
-#pragma warning restore CS8601 // Possible null reference assignment.
         //Act 
-        var mongoClient = new MongoDbContext(config!, contextOptions);
+        var mongoClient = new MongoDbContext(_client, contextOptions);
         var employeeCollection = mongoClient.Database.GetCollection<Employee>(collectionOptions.Value.Collection);
         var filter = Builders<Employee>.Filter.Empty;
         var result = await employeeCollection.FindAsync(filter);

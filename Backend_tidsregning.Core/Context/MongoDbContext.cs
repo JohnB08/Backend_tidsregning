@@ -7,17 +7,7 @@ using MongoDB.Driver;
 
 namespace Backend_tidsregning.Core.Context;
 
-public class MongoDbContext
+public class MongoDbContext(IMongoClient client, IOptions<ContextOptions.ContextOptions> options)
 {
-    private MongoClient _client;
-    public IMongoDatabase Database { get; private set; }
-    public MongoDbContext(IConfiguration config, IOptions<ContextOptions.ContextOptions> options)
-    {
-        var connectionString = config["MongoDb:ConnectionString"];
-        if (string.IsNullOrWhiteSpace(connectionString)) connectionString = config["MONGO_DB_CONNECTION_STRING"];
-        var settings = MongoClientSettings.FromConnectionString(connectionString);
-        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
-        _client = new MongoClient(settings);
-        Database = _client.GetDatabase(options.Value.DatabaseName);
-    }
+    public IMongoDatabase Database { get; private set; } = client.GetDatabase(options.Value.DatabaseName);
 }
